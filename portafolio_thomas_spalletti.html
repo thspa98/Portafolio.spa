@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thomas Spalletti — Portafolio</title>
+  <meta name="description" content="Portafolio interactivo de Thomas Spalletti: Community Manager y Diseñador Digital en Semillero Albiazul y Centro de Estudiantes Synergia." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <style>
+    :root{
+      --bg:#0b0c14;
+      --bg-2:#111427;
+      --primary:#635bff;
+      --accent:#7a6cff;
+      --text:#f7f7fb;
+      --muted:#b6b7c9;
+      --glass: rgba(10,12,25,0.55);
+      --radius:24px;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji;
+      background:linear-gradient(180deg,var(--bg),var(--bg-2));
+      color:var(--text);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      scroll-behavior:smooth;
+    }
+    a{color:var(--text); text-decoration:none}
+
+    /* Centered, auto-hide nav */
+    header.nav{
+      position:fixed; top:0; left:0; right:0; height:64px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg,rgba(10,12,25,.9),rgba(10,12,25,0));
+      backdrop-filter:saturate(140%) blur(8px);
+      z-index:100;
+      transition:transform .35s ease;
+    }
+    header.nav.nav--hidden{ transform:translateY(-100%) }
+    .nav-inner{
+      display:flex; gap:10px; align-items:center; padding:6px;
+      border:1px solid rgba(255,255,255,.08);
+      background:var(--glass); border-radius:999px; box-shadow:var(--shadow);
+    }
+    .btn{
+      border:1px solid transparent;
+      padding:10px 14px; border-radius:999px; font-weight:700;
+      color:var(--text); background:transparent;
+    }
+    .btn:hover{ background:rgba(99,91,255,.15); border-color:rgba(99,91,255,.35) }
+    #langToggle{border:1px solid rgba(255,255,255,.12)}
+
+    .hero{ position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:64px 6vw 0; overflow:hidden; }
+    .hero video.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; filter:brightness(.35) contrast(1.05) saturate(1.05); }
+    .hero::after{ content:""; position:absolute; inset:0; z-index:-1; background: radial-gradient(1200px 600px at 50% 80%, rgba(122,108,255,.15), transparent 60%); pointer-events:none; }
+    .hero .title{ text-align:center; font-size: clamp(40px, 9vw, 128px); font-weight:800; letter-spacing:-.03em; margin:0; text-shadow:0 8px 40px rgba(0,0,0,.45); }
+    .scroll-indicator{ position:absolute; bottom:20px; left:50%; transform:translateX(-50%); opacity:.8; font-size:14px; color:var(--muted); animation:float 3s ease-in-out infinite; }
+    @keyframes float{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-6px)}}
+
+    section{ padding:96px 6vw }
+    .section-title{ font-size: clamp(24px, 4vw, 44px); margin:0 0 12px 0; font-weight:800; letter-spacing:-.02em; }
+    .section-sub{ margin:0 0 34px 0; color:var(--muted) }
+    .grid{ display:grid; gap:24px; grid-template-columns: 1fr; }
+    @media(min-width:900px){ .grid-2{grid-template-columns:1.2fr .8fr} .grid-3{grid-template-columns:repeat(3,1fr)} }
+    .card{ background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; }
+    .pill{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px; background:linear-gradient(180deg, rgba(122,108,255,.15), rgba(99,91,255,.06)); border:1px solid rgba(122,108,255,.35); color:var(--text); font-weight:600; letter-spacing:.2px; }
+    .logo{ width:150px; height:150px; border-radius:50%; background:#0d1128; display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px solid rgba(255,255,255,.08); }
+    .logo img{ width:92%; height:92%; object-fit:contain }
+    .chip{ font-weight:600; color:#e7e7fe; border:1px solid rgba(255,255,255,.08); background:var(--glass); padding:8px 12px; border-radius:12px; }
+    .skills{ display:flex; gap:10px; flex-wrap:wrap }
+    .reveal-video{ width:100%; border-radius:20px; border:1px solid rgba(255,255,255,.08); overflow:hidden; background:#0b0c14; opacity:.6; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease; }
+    .reveal-video video{ width:100%; height:auto; display:block }
+    .reveal-video.active{ opacity:1; transform:translateY(0) }
+    .contact{ text-align:center; }
+    .social{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    .social a{ border:1px solid rgba(255,255,255,.14); padding:10px 14px; border-radius:12px; background:rgba(99,91,255,.12) }
+    footer{ padding:36px 6vw; color:var(--muted); border-top:1px dashed rgba(255,255,255,.08); text-align:center }
+    .sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+    @media (prefers-reduced-motion: reduce) { *{animation:none !important; transition:none !important} .hero video.bg{filter:brightness(.55)} }
+
+    /* Synergia cover video size */
+    .sy-cover{ height: clamp(260px, 60vh, 720px); border-radius:22px; }
+    .sy-cover video{ width:100%; height:100%; object-fit:cover; }
+    @media (max-width: 768px){
+      .sy-cover{ height: clamp(220px, 42vh, 520px); }
+    }
+
+    /* Carousel */
+    .carousel{ position:relative; overflow:hidden; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02) }
+    .carousel-track{ display:flex; transition:transform .5s ease }
+    .carousel .slide{ min-width:100%; }
+    .carousel .media{ width:100%; aspect-ratio:16/9; position:relative; overflow:hidden }
+    .carousel img, .carousel video{ width:100%; height:100%; object-fit:cover; transform:scale(1); transition:transform .4s ease }
+    .carousel .slide:hover img, .carousel .slide:hover video{ transform:scale(1.05) }
+    .car-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(10,12,25,.6); border:1px solid rgba(255,255,255,.15); color:var(--text); width:40px; height:40px; border-radius:999px; display:grid; place-items:center; font-size:22px; cursor:pointer }
+    .car-btn.prev{ left:10px } .car-btn.next{ right:10px }
+  </style>
+</head>
+<body>
+  <!-- NAV / ÍNDICE -->
+  <header class="nav" id="nav">
+    <nav class="nav-inner" aria-label="Índice">
+      <a href="#home" class="btn" data-i18n="nav.home">Inicio</a>
+      <a href="#about" class="btn" data-i18n="nav.about">Sobre mí</a>
+      <a href="#experience" class="btn" data-i18n="nav.experience">Experiencia</a>
+      <!-- Synergia intentionally removed from index per request -->
+      <a href="#skills" class="btn" data-i18n="nav.skills">Habilidades</a>
+      <a href="#contact" class="btn" data-i18n="nav.contact">Contacto</a>
+      <button id="langToggle" class="btn" aria-label="Cambiar idioma">ES/EN</button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home" aria-label="Hero">
+    <video class="bg" autoplay muted loop playsinline preload="auto">
+      <source src="IMG_7192 (1).MOV" type="video/quicktime">
+      <source src="IMG_7192 (1).MOV" type="video/mp4">
+    </video>
+    <h1 class="title" data-aos="fade-up" data-i18n="hero.welcome">bienvenido</h1>
+    <div class="scroll-indicator" data-i18n="hero.scroll">Deslizá para ver más</div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="pill" data-aos="zoom-in" data-i18n="about.pill">Community Manager &amp; Diseñador Digital</p>
+    <div class="grid grid-2">
+      <div class="card" data-aos="fade-right">
+        <h2 class="section-title" data-i18n="about.title">Sobre mí</h2>
+        <p class="section-sub" data-i18n="about.lead">
+          Me enfoco en crear contenido claro y con identidad visual consistente. Combino diseño, estrategia y ejecución para que cada pieza comunique y convierta. También gestiono **Facebook** (páginas y contenidos) además de Instagram.
+        </p>
+        <div class="skills" style="margin:14px 0 0">
+          <span class="chip">Branding</span>
+          <span class="chip" data-i18n="chip.content">Gestión de Contenido</span>
+          <span class="chip" data-i18n="chip.photo">Fotografía Deportiva</span>
+          <span class="chip" data-i18n="chip.video">Edición de Video</span>
+          <span class="chip" data-i18n="chip.web">Landing Pages</span>
+        </div>
+      </div>
+      <div class="card" data-aos="fade-left">
+        <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px">
+          <div class="logo"><img alt="Semillero Albiazul" src="logoFINAL.png"></div>
+          <div>
+            <h3 style="margin:0" data-i18n="about.roleTitle">Semillero Albiazul</h3>
+            <small style="color:var(--muted)" data-i18n="about.roleSub">Community Manager y Diseñador Digital</small>
+            <div class="social">
+              <a href="https://www.instagram.com/semillero.albiazul/" target="_blank" rel="noopener">Instagram</a>
+            </div>
+          </div>
+        </div>
+        <p style="margin-top:6px" data-i18n="about.roleBody">
+          Desarrollo la línea visual del proyecto, planifico el calendario de publicaciones y produzco piezas para redes, web y eventos.
+        </p>
+        <div class="reveal-video" data-aos="fade-up">
+          <video class="inline" muted playsinline preload="metadata" controls>
+            <source src="VIDEO_PUBLI.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <h2 class="section-title" data-i18n="exp.title">Experiencia</h2>
+    <p class="section-sub" data-i18n="exp.lead">
+      Lo mío es contar historias con estética limpia. Mientras navegás, aparecen videos e imágenes que muestran mi proceso y resultados.
+    </p>
+
+    <div class="grid grid-3">
+      <div class="card" data-aos="fade-up">
+        <h3 style="margin-top:0" data-i18n="exp.card1.title">Diseño y Contenido</h3>
+        <p data-i18n="exp.card1.body">Guiones, piezas estáticas, microvideos y carruseles con foco en claridad y marca.</p>
+        <div class="reveal-video">
+          <video class="inline" muted playsinline preload="metadata" controls>
+            <source src="IMG_7217 (2).MOV" type="video/quicktime">
+            <source src="IMG_7217 (2).MOV" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="card" data-aos="fade-up" data-aos-delay="80">
+        <h3 style="margin-top:0" data-i18n="exp.card2.title">Fotografía Deportiva</h3>
+        <p data-i18n="exp.card2.body">Cobertura de partidos y entorno: composición, timing y edición orientada a redes.</p>
+        <img src="Curriculum Fotografo Moderno Blanco y negro.png" alt="CV visual" style="width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.08)">
+      </div>
+      <div class="card" data-aos="fade-up" data-aos-delay="160">
+        <h3 style="margin-top:0" data-i18n="exp.card3.title">Estrategia</h3>
+        <p data-i18n="exp.card3.body">Definición de tono, calendario y métricas. Iteración rápida basada en datos.</p>
+        <ul style="margin:0; padding-left:18px; color:var(--muted)">
+          <li data-i18n="exp.card3.li1">Sistema visual consistente</li>
+          <li data-i18n="exp.card3.li2">Guías de estilo para equipos</li>
+          <li data-i18n="exp.card3.li3">Workflows simples</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNERGIA -->
+  <section id="synergia">
+    <div class="card" data-aos="fade-right">
+      <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+        <img src="Logo.png" alt="Logo Synergia" style="width:140px;height:auto;border-radius:20px;border:1px solid rgba(255,255,255,.08)">
+        <div>
+          <h2 class="section-title" style="margin:0">Centro de Estudiantes “Synergia”</h2>
+          <p class="section-sub" style="margin-top:6px">Community Manager & Diseño · mismas funciones que en Semillero, orientadas a comunidad escolar.</p>
+          <div class="social">
+            <a href="https://www.instagram.com/lista_synergia/" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video de portada de la sección (tamaño ajustado) -->
+      <div class="reveal-video sy-cover" style="margin-top:16px">
+        <video class="inline" muted playsinline preload="metadata" controls>
+          <source src="VIDEO SYNERGIA.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Habilidades específicas Synergia -->
+      <div class="skills" style="margin-top:14px">
+        <span class="chip">Planificación de parrilla</span>
+        <span class="chip">Producción de Reels</span>
+        <span class="chip">Cobertura de eventos</span>
+        <span class="chip">Copywriting y guiones</span>
+        <span class="chip">Moderación de comunidad</span>
+        <span class="chip">Analítica (IG Insights)</span>
+        <span class="chip">Plantillas y press kit</span>
+        <span class="chip">Coordinación con directiva</span>
+        <span class="chip">Shooting en baja luz</span>
+        <span class="chip">Audio básico en vivo</span>
+      </div>
+
+      <!-- Carrusel responsive con hover zoom suave -->
+      <div class="carousel" data-aos="zoom-in" style="margin-top:18px">
+        <div class="carousel-track">
+          <div class="slide">
+            <div class="media"><img loading="lazy" src="IMG_5060.jpg" alt="Synergia foto 1"></div>
+          </div>
+          <div class="slide">
+            <div class="media"><img loading="lazy" src="IMG_5133.jpg" alt="Synergia foto 2"></div>
+          </div>
+          <div class="slide">
+            <div class="media"><img loading="lazy" src="IMG_5135.jpg" alt="Synergia foto 3"></div>
+          </div>
+          <div class="slide">
+            <div class="media"><video muted playsinline preload="metadata" controls><source src="IMG_1418.MOV" type="video/quicktime"><source src="IMG_1418.MOV" type="video/mp4"></video></div>
+          </div>
+        </div>
+        <button class="car-btn prev" aria-label="Anterior">‹</button>
+        <button class="car-btn next" aria-label="Siguiente">›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2 class="section-title" data-i18n="skills.title">Habilidades</h2>
+    <div class="grid grid-3">
+      <div class="card" data-aos="fade-right">
+        <h3 style="margin-top:0" data-i18n="skills.block1.title">Contenido</h3>
+        <div class="skills">
+          <span class="chip" data-i18n="skills.block1.a">Dirección creativa</span>
+          <span class="chip" data-i18n="skills.block1.b">Guion y storytelling</span>
+          <span class="chip" data-i18n="skills.block1.c">Calendario editorial</span>
+        </div>
+      </div>
+      <div class="card" data-aos="zoom-in">
+        <h3 style="margin-top:0" data-i18n="skills.block2.title">Visual</h3>
+        <div class="skills">
+          <span class="chip">Figma</span>
+          <span class="chip">Photoshop</span>
+          <span class="chip">Lightroom</span>
+          <span class="chip">Premiere</span>
+          <span class="chip">After Effects</span>
+        </div>
+      </div>
+      <div class="card" data-aos="fade-left">
+        <h3 style="margin-top:0" data-i18n="skills.block3.title">Web</h3>
+        <div class="skills">
+          <span class="chip">HTML/CSS</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip" data-i18n="skills.block3.a">Landing Pages</span>
+          <span class="chip" data-i18n="skills.block3.b">Optimización móvil</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <h2 class="section-title" data-i18n="contact.title">Contacto</h2>
+    <p class="section-sub" data-i18n="contact.lead">¿Charlamos de un proyecto?</p>
+    <a class="btn" href="mailto:thomasspalletti98@gmail.com">thomasspalletti98@gmail.com</a>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Thomas Spalletti · <span data-i18n="footer.made">Hecho con foco en simpleza y detalle.</span>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Init AOS
+    AOS.init({ once: true, duration: 700, easing: 'ease-out-quart' });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal videos on scroll
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('active'); const v=e.target.querySelector('video'); if(v && v.paused && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){ v.play().catch(()=>{}); } }
+      });
+    }, {threshold:.25});
+    document.querySelectorAll('.reveal-video').forEach(el=>observer.observe(el));
+
+    // Auto-hide nav on scroll down, show on scroll up
+    let lastY = window.scrollY, ticking=false;
+    function onScroll(){
+      const currentY = window.scrollY;
+      const nav = document.getElementById('nav');
+      if(currentY > lastY && currentY > 80){ nav.classList.add('nav--hidden'); }
+      else { nav.classList.remove('nav--hidden'); }
+      lastY = currentY;
+      ticking=false;
+    }
+    window.addEventListener('scroll', ()=>{
+      if(!ticking){ window.requestAnimationFrame(onScroll); ticking=true; }
+    });
+
+    // i18n dictionary
+    const dict = {
+      es: {
+        'nav.home':'Inicio','nav.about':'Sobre mí','nav.experience':'Experiencia','nav.skills':'Habilidades','nav.contact':'Contacto',
+        'hero.welcome':'bienvenido','hero.scroll':'Deslizá para ver más',
+        'about.pill':'Community Manager & Diseñador Digital',
+        'about.title':'Sobre mí',
+        'about.lead':'Me enfoco en crear contenido claro y con identidad visual consistente. Combino diseño, estrategia y ejecución para que cada pieza comunique y convierta. También gestiono **Facebook** (páginas y contenidos) además de Instagram.',
+        'chip.content':'Gestión de Contenido','chip.photo':'Fotografía Deportiva','chip.video':'Edición de Video','chip.web':'Landing Pages',
+        'about.roleTitle':'Semillero Albiazul',
+        'about.roleSub':'Community Manager y Diseñador Digital',
+        'about.roleBody':'Desarrollo la línea visual del proyecto, planifico el calendario de publicaciones y produzco piezas para redes, web y eventos.',
+        'exp.title':'Experiencia',
+        'exp.lead':'Lo mío es contar historias con estética limpia. Mientras navegás, aparecen videos e imágenes que muestran mi proceso y resultados.',
+        'exp.card1.title':'Diseño y Contenido','exp.card1.body':'Guiones, piezas estáticas, microvideos y carruseles con foco en claridad y marca.',
+        'exp.card2.title':'Fotografía Deportiva','exp.card2.body':'Cobertura de partidos y entorno: composición, timing y edición orientada a redes.',
+        'exp.card3.title':'Estrategia','exp.card3.body':'Definición de tono, calendario y métricas. Iteración rápida basada en datos.',
+        'exp.card3.li1':'Sistema visual consistente','exp.card3.li2':'Guías de estilo para equipos','exp.card3.li3':'Workflows simples',
+        'skills.title':'Habilidades',
+        'skills.block1.title':'Contenido','skills.block1.a':'Dirección creativa','skills.block1.b':'Guion y storytelling','skills.block1.c':'Calendario editorial',
+        'skills.block2.title':'Visual',
+        'skills.block3.title':'Web','skills.block3.a':'Landing Pages','skills.block3.b':'Optimización móvil',
+        'contact.title':'Contacto','contact.lead':'¿Charlamos de un proyecto?',
+        'footer.made':'Hecho con foco en simpleza y detalle.'
+      },
+      en: {
+        'nav.home':'Home','nav.about':'About','nav.experience':'Experience','nav.skills':'Skills','nav.contact':'Contact',
+        'hero.welcome':'welcome','hero.scroll':'Scroll to explore',
+        'about.pill':'Community Manager & Digital Designer',
+        'about.title':'About me',
+        'about.lead':'I craft clear content with a consistent visual identity. I blend design, strategy and execution so every piece communicates and converts. I also manage **Facebook** pages in addition to Instagram.',
+        'chip.content':'Content Management','chip.photo':'Sports Photography','chip.video':'Video Editing','chip.web':'Landing Pages',
+        'about.roleTitle':'Semillero Albiazul',
+        'about.roleSub':'Community Manager & Digital Designer',
+        'about.roleBody':'I develop the project’s visual system, plan the publishing calendar and produce assets for social, web and events.',
+        'exp.title':'Experience',
+        'exp.lead':'I tell stories with a clean aesthetic. As you scroll, videos and images appear to showcase my process and results.',
+        'exp.card1.title':'Design & Content','exp.card1.body':'Scripts, static pieces, micro-videos and carousels with brand clarity.',
+        'exp.card2.title':'Sports Photography','exp.card2.body':'Match and environment coverage: composition, timing and social-first editing.',
+        'exp.card3.title':'Strategy','exp.card3.body':'Tone, calendar and metrics. Fast iteration driven by data.',
+        'exp.card3.li1':'Consistent visual system','exp.card3.li2':'Team style guides','exp.card3.li3':'Simple workflows',
+        'skills.title':'Skills',
+        'skills.block1.title':'Content','skills.block1.a':'Creative Direction','skills.block1.b':'Scripting & Storytelling','skills.block1.c':'Editorial Calendar',
+        'skills.block2.title':'Visual',
+        'skills.block3.title':'Web','skills.block3.a':'Landing Pages','skills.block3.b':'Mobile Optimization',
+        'contact.title':'Contact','contact.lead':'Let’s chat about a project.',
+        'footer.made':'Built with focus on simplicity and detail.'
+      }
+    };
+
+    let currentLang = 'es';
+    function applyLang(lang){
+      currentLang = lang;
+      const map = dict[lang];
+      Object.keys(map).forEach(key => {
+        document.querySelectorAll('[data-i18n="'+key+'"]').forEach(el=>{
+          el.innerText = map[key];
+        });
+      });
+      document.documentElement.lang = lang === 'es' ? 'es' : 'en';
+      document.getElementById('langToggle').textContent = lang.toUpperCase() === 'ES' ? 'ES/EN' : 'EN/ES';
+    }
+    document.getElementById('langToggle').addEventListener('click', ()=>applyLang(currentLang==='es'?'en':'es'));
+    applyLang('es');
+
+    // Carousel logic
+    document.querySelectorAll('.carousel').forEach(carousel => {
+      const track = carousel.querySelector('.carousel-track');
+      const slides = Array.from(track.children);
+      let index = 0;
+      const update = ()=>{ track.style.transform = `translateX(-${index*100}%)`; };
+      carousel.querySelector('.next').addEventListener('click', ()=>{ index = (index+1)%slides.length; update(); });
+      carousel.querySelector('.prev').addEventListener('click', ()=>{ index = (index-1+slides.length)%slides.length; update(); });
+      // Swipe
+      let startX=0, dx=0;
+      track.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
+      track.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
+      track.addEventListener('touchend', ()=>{ if(Math.abs(dx)>50){ index = dx<0 ? (index+1)%slides.length : (index-1+slides.length)%slides.length; update(); } dx=0; });
+      // Keyboard
+      carousel.setAttribute('tabindex','0');
+      carousel.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ index=(index+1)%slides.length; update(); } if(e.key==='ArrowLeft'){ index=(index-1+slides.length)%slides.length; update(); } });
+    });
+  </script>
+</body>
+</html>
