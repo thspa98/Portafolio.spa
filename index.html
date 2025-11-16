@@ -34,7 +34,7 @@
     }
     a{color:var(--text); text-decoration:none}
 
-    /* Centered, auto-hide nav */
+    /* NAV centrado que se esconde al bajar */
     header.nav{
       position:fixed; top:0; left:0; right:0; height:64px;
       display:flex; align-items:center; justify-content:center;
@@ -58,11 +58,11 @@
     .btn:hover{ background:rgba(99,91,255,.15); border-color:rgba(99,91,255,.35) }
     #langToggle{border:1px solid rgba(255,255,255,.12)}
 
+    /* HERO */
     .hero{ position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:64px 6vw 0; overflow:hidden; text-align:center;}
     .hero video.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; filter:brightness(.35) contrast(1.05) saturate(1.05); }
     .hero::after{ content:""; position:absolute; inset:0; z-index:-1; background: radial-gradient(1200px 600px at 50% 80%, rgba(122,108,255,.15), transparent 60%); pointer-events:none; }
     .hero .title{ font-size: clamp(40px, 9vw, 128px); font-weight:800; letter-spacing:-.03em; margin:0 0 16px 0; text-shadow:0 8px 40px rgba(0,0,0,.45); }
-    .short-hero{ width:100%; max-width:360px; margin:0 auto; }
     .scroll-indicator{ position:absolute; bottom:20px; left:50%; transform:translateX(-50%); opacity:.8; font-size:14px; color:var(--muted); animation:float 3s ease-in-out infinite; }
     @keyframes float{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-6px)}}
 
@@ -87,48 +87,39 @@
     .sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
     @media (prefers-reduced-motion: reduce) { *{animation:none !important; transition:none !important} .hero video.bg{filter:brightness(.55)} }
 
-    /* Hero Short container */
-    .short-container {
+    /* Sección con Short de fondo (Synergia) */
+    .section-con-video{
       position: relative;
-      width: 100%;
-      padding-bottom: 177.78%; /* 9:16 */
-      height: 0;
+      min-height: 70vh;
       overflow: hidden;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
     }
-    .short-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: none;
+    .section-con-video .bg-youtube{
+      position:absolute;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      overflow:hidden;
     }
-
-    /* Synergia Short grid */
-    .sy-shorts .short-container{
-      max-width:420px;
-      margin:0 auto;
+    .section-con-video .bg-youtube iframe{
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:120%;
+      height:120%;
+      transform:translate(-50%,-50%);
+      border:none;
     }
-    @media(min-width:900px){
-      .sy-shorts{ grid-template-columns:repeat(2,1fr); }
+    .section-con-video::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:linear-gradient(180deg,rgba(0,0,0,0.55),rgba(0,0,0,0.8));
     }
-
-    /* Synergia cover video size (usamos el Short en Hero, acá no hace falta extra) */
-    .sy-cover{ border-radius:22px; }
-
-    /* Carousel (usado para Semillero y galería Synergia) */
-    .carousel{ position:relative; overflow:hidden; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02) }
-    .carousel-track{ display:flex; transition:transform .5s ease }
-    .carousel .slide{ min-width:100%; }
-    .carousel .media{ width:100%; aspect-ratio:16/9; position:relative; overflow:hidden }
-    .carousel img, .carousel video{ width:100%; height:100%; object-fit:cover; transform:scale(1); transition:transform .4s ease }
-    .carousel iframe{ width:100%; height:100%; border:none; }
-    .carousel .slide:hover img, .carousel .slide:hover video{ transform:scale(1.05) }
-    .car-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(10,12,25,.6); border:1px solid rgba(255,255,255,.15); color:var(--text); width:40px; height:40px; border-radius:999px; display:grid; place-items:center; font-size:22px; cursor:pointer }
-    .car-btn.prev{ left:10px } .car-btn.next{ right:10px }
+    .section-con-video .contenido-encima{
+      position:relative;
+      z-index:1;
+    }
   </style>
 </head>
 <body>
@@ -138,40 +129,28 @@
       <a href="#home" class="btn" data-i18n="nav.home">Inicio</a>
       <a href="#about" class="btn" data-i18n="nav.about">Sobre mí</a>
       <a href="#experience" class="btn" data-i18n="nav.experience">Experiencia</a>
-      <!-- Synergia no figura en índice por pedido -->
+      <!-- Synergia no está en el índice por pedido -->
       <a href="#skills" class="btn" data-i18n="nav.skills">Habilidades</a>
       <a href="#contact" class="btn" data-i18n="nav.contact">Contacto</a>
       <button id="langToggle" class="btn" aria-label="Cambiar idioma">ES/EN</button>
     </nav>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO CON VIDEO DE FONDO (PORTADA) -->
   <section class="hero" id="home" aria-label="Hero">
     <video class="bg" autoplay muted loop playsinline preload="auto">
       <source src="IMG_7192 (1).MOV" type="video/quicktime">
       <source src="IMG_7192 (1).MOV" type="video/mp4">
     </video>
     <h1 class="title" data-aos="fade-up" data-i18n="hero.welcome">bienvenido</h1>
-
-    <!-- Short de portada (autoplay estilo Apple) -->
-    <div class="short-hero" data-aos="fade-up" data-aos-delay="120">
-      <div class="short-container">
-        <iframe 
-          src="https://www.youtube.com/embed/njTfgbeNx3A?controls=0&autoplay=1&mute=1&loop=1&playlist=njTfgbeNx3A"
-          title="Portada Short"
-          allow="autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-    </div>
-
     <div class="scroll-indicator" data-i18n="hero.scroll">Deslizá para ver más</div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ABOUT + SEMILLERO (SIN VIDEOS) -->
   <section id="about">
     <p class="pill" data-aos="zoom-in" data-i18n="about.pill">Community Manager &amp; Diseñador Digital</p>
     <div class="grid grid-2">
+      <!-- Sobre mí -->
       <div class="card" data-aos="fade-right">
         <h2 class="section-title" data-i18n="about.title">Sobre mí</h2>
         <p class="section-sub" data-i18n="about.lead">
@@ -186,7 +165,7 @@
         </div>
       </div>
 
-      <!-- Semillero Albiazul (con carrusel de Shorts) -->
+      <!-- Semillero Albiazul (solo texto + logo) -->
       <div class="card" id="semillero" data-aos="fade-left">
         <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px">
           <div class="logo"><img alt="Semillero Albiazul" src="logoFINAL.png"></div>
@@ -201,62 +180,21 @@
         <p style="margin-top:6px" data-i18n="about.roleBody">
           Desarrollo la línea visual del proyecto, planifico el calendario de publicaciones y produzco piezas para redes, web y eventos.
         </p>
-
-        <!-- Carrusel de Shorts Semillero -->
-        <div class="carousel" data-aos="fade-up" style="margin-top:16px">
-          <div class="carousel-track">
-            <div class="slide">
-              <div class="media">
-                <iframe 
-                  src="https://www.youtube.com/embed/0OkmIU2t8mk"
-                  title="Semillero Short 1"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-            </div>
-            <div class="slide">
-              <div class="media">
-                <iframe 
-                  src="https://www.youtube.com/embed/zZdhDhsk9Ec"
-                  title="Semillero Short 2"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-            </div>
-            <div class="slide">
-              <div class="media">
-                <iframe 
-                  src="https://www.youtube.com/embed/stVetdQoprQ"
-                  title="Semillero Short 3"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <button class="car-btn prev" aria-label="Anterior">‹</button>
-          <button class="car-btn next" aria-label="Siguiente">›</button>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- EXPERIENCE -->
+  <!-- EXPERIENCE (SIN VIDEO, SOLO IMAGEN Y TEXTO) -->
   <section id="experience">
     <h2 class="section-title" data-i18n="exp.title">Experiencia</h2>
     <p class="section-sub" data-i18n="exp.lead">
-      Lo mío es contar historias con estética limpia. Mientras navegás, aparecen videos e imágenes que muestran mi proceso y resultados.
+      Lo mío es contar historias con estética limpia. Mientras navegás, aparecen piezas e imágenes que muestran mi proceso y resultados.
     </p>
 
     <div class="grid grid-3">
       <div class="card" data-aos="fade-up">
         <h3 style="margin-top:0" data-i18n="exp.card1.title">Diseño y Contenido</h3>
         <p data-i18n="exp.card1.body">Guiones, piezas estáticas, microvideos y carruseles con foco en claridad y marca.</p>
-        <div class="reveal-video">
-          <video class="inline" muted playsinline preload="metadata" controls>
-            <source src="IMG_7217 (2).MOV" type="video/quicktime">
-            <source src="IMG_7217 (2).MOV" type="video/mp4">
-          </video>
-        </div>
       </div>
       <div class="card" data-aos="fade-up" data-aos-delay="80">
         <h3 style="margin-top:0" data-i18n="exp.card2.title">Fotografía Deportiva</h3>
@@ -275,64 +213,64 @@
     </div>
   </section>
 
-  <!-- SYNERGIA -->
-  <section id="synergia">
-    <div class="card" data-aos="fade-right">
-      <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
-        <img src="Logo.png" alt="Logo Synergia" style="width:140px;height:auto;border-radius:20px;border:1px solid rgba(255,255,255,.08)">
-        <div>
-          <h2 class="section-title" style="margin:0">Centro de Estudiantes “Synergia”</h2>
-          <p class="section-sub" style="margin-top:6px">Community Manager & Diseño · mismas funciones que en Semillero, orientadas a comunidad escolar.</p>
-          <div class="social">
-            <a href="https://www.instagram.com/lista_synergia/" target="_blank" rel="noopener">Instagram</a>
+  <!-- SYNERGIA: SHORT DE FONDO + VIDEO SYNERGIA + FOTOS -->
+  <section id="synergia" class="section-con-video">
+    <!-- Fondo con Short de YouTube -->
+    <div class="bg-youtube">
+      <iframe
+        src="https://www.youtube.com/embed/gF8im7Ldtmg?autoplay=1&mute=1&loop=1&controls=0&playlist=gF8im7Ldtmg&modestbranding=1&playsinline=1"
+        title="Synergia Fondo"
+        allow="autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Contenido encima del video -->
+    <div class="contenido-encima">
+      <div class="card" data-aos="fade-right">
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+          <img src="Logo.png" alt="Logo Synergia" style="width:140px;height:auto;border-radius:20px;border:1px solid rgba(255,255,255,.08)">
+          <div>
+            <h2 class="section-title" style="margin:0">Centro de Estudiantes “Synergia”</h2>
+            <p class="section-sub" style="margin-top:6px">
+              Community Manager & Diseño · contenido pensado para la comunidad escolar, actividades, campañas y comunicación interna.
+            </p>
+            <div class="social">
+              <a href="https://www.instagram.com/lista_synergia/" target="_blank" rel="noopener">Instagram</a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Shorts Synergia -->
-      <div class="grid sy-shorts" style="margin-top:16px">
-        <div>
-          <div class="short-container">
-            <iframe 
-              src="https://www.youtube.com/embed/gF8im7Ldtmg"
-              title="Synergia Short 1"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-          </div>
+        <!-- Habilidades específicas Synergia -->
+        <div class="skills" style="margin-top:14px">
+          <span class="chip">Planificación de parrilla</span>
+          <span class="chip">Producción de Reels</span>
+          <span class="chip">Cobertura de eventos</span>
+          <span class="chip">Copywriting y guiones</span>
+          <span class="chip">Moderación de comunidad</span>
+          <span class="chip">Analítica (IG Insights)</span>
+          <span class="chip">Plantillas y press kit</span>
+          <span class="chip">Coordinación con directiva</span>
+          <span class="chip">Shooting en baja luz</span>
+          <span class="chip">Audio básico en vivo</span>
         </div>
-        <div>
-          <div class="short-container">
-            <iframe 
-              src="https://www.youtube.com/embed/RXQzkMZPmNc"
-              title="Synergia Short 2"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-          </div>
+
+        <!-- ÚNICO VIDEO LOCAL QUE QUERÉS MANTENER -->
+        <div class="reveal-video sy-cover" style="margin-top:20px">
+          <video class="inline" muted playsinline preload="metadata" controls>
+            <source src="VIDEO SYNERGIA.mp4" type="video/mp4">
+          </video>
         </div>
-      </div>
 
-      <!-- Habilidades específicas Synergia -->
-      <div class="skills" style="margin-top:14px">
-        <span class="chip">Planificación de parrilla</span>
-        <span class="chip">Producción de Reels</span>
-        <span class="chip">Cobertura de eventos</span>
-        <span class="chip">Copywriting y guiones</span>
-        <span class="chip">Moderación de comunidad</span>
-        <span class="chip">Analítica (IG Insights)</span>
-        <span class="chip">Plantillas y press kit</span>
-        <span class="chip">Coordinación con directiva</span>
-        <span class="chip">Shooting en baja luz</span>
-        <span class="chip">Audio básico en vivo</span>
-      </div>
-
-      <!-- Galería Synergia (fotos) -->
-      <div class="grid" style="margin-top:16px">
-        <div class="card" data-aos="zoom-in">
-          <p style="color:var(--muted);margin:0">Galería Synergia</p>
-          <div class="skills" style="gap:16px">
-            <img src="IMG_5060.jpg" alt="Foto Synergia 1" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
-            <img src="IMG_5133.jpg" alt="Foto Synergia 2" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
-            <img src="IMG_5135.jpg" alt="Foto Synergia 3" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+        <!-- Galería Synergia (fotos) -->
+        <div class="grid" style="margin-top:16px">
+          <div class="card" data-aos="zoom-in">
+            <p style="color:var(--muted);margin:0">Galería Synergia</p>
+            <div class="skills" style="gap:16px">
+              <img src="IMG_5060.jpg" alt="Foto Synergia 1" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+              <img src="IMG_5133.jpg" alt="Foto Synergia 2" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+              <img src="IMG_5135.jpg" alt="Foto Synergia 3" style="width:30%;min-width:160px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+            </div>
           </div>
         </div>
       </div>
@@ -389,7 +327,7 @@
     // Init AOS
     AOS.init({ once: true, duration: 700, easing: 'ease-out-quart' });
 
-    // Reveal videos on scroll (solo para <video>, no afecta iframes)
+    // Reveal videos on scroll (aplica a VIDEO SYNERGIA)
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
         if(e.isIntersecting){
@@ -430,7 +368,7 @@
         'about.roleSub':'Community Manager y Diseñador Digital',
         'about.roleBody':'Desarrollo la línea visual del proyecto, planifico el calendario de publicaciones y produzco piezas para redes, web y eventos.',
         'exp.title':'Experiencia',
-        'exp.lead':'Lo mío es contar historias con estética limpia. Mientras navegás, aparecen videos e imágenes que muestran mi proceso y resultados.',
+        'exp.lead':'Lo mío es contar historias con estética limpia. Mientras navegás, aparecen piezas e imágenes que muestran mi proceso y resultados.',
         'exp.card1.title':'Diseño y Contenido','exp.card1.body':'Guiones, piezas estáticas, microvideos y carruseles con foco en claridad y marca.',
         'exp.card2.title':'Fotografía Deportiva','exp.card2.body':'Cobertura de partidos y entorno: composición, timing y edición orientada a redes.',
         'exp.card3.title':'Estrategia','exp.card3.body':'Definición de tono, calendario y métricas. Iteración rápida basada en datos.',
@@ -439,8 +377,7 @@
         'skills.block1.title':'Contenido','skills.block1.a':'Dirección creativa','skills.block1.b':'Guion y storytelling','skills.block1.c':'Calendario editorial',
         'skills.block2.title':'Visual',
         'skills.block3.title':'Web','skills.block3.a':'Landing Pages','skills.block3.b':'Optimización móvil',
-        'contact.title':'Contacto','contact.lead':'¿Charlamos de un proyecto?',
-        'footer.made':'Hecho con foco en simpleza y detalle.'
+        'contact.title':'Contacto','contact.lead':'¿Charlamos de un proyecto?'
       },
       en: {
         'nav.home':'Home','nav.about':'About','nav.experience':'Experience','nav.skills':'Skills','nav.contact':'Contact',
@@ -453,7 +390,7 @@
         'about.roleSub':'Community Manager & Digital Designer',
         'about.roleBody':'I develop the project’s visual system, plan the publishing calendar and produce assets for social, web and events.',
         'exp.title':'Experience',
-        'exp.lead':'I tell stories with a clean aesthetic. As you scroll, videos and images appear to showcase my process and results.',
+        'exp.lead':'I tell stories with a clean aesthetic. As you scroll, pieces and images appear to showcase my process and results.',
         'exp.card1.title':'Design & Content','exp.card1.body':'Scripts, static pieces, micro-videos and carousels with brand clarity.',
         'exp.card2.title':'Sports Photography','exp.card2.body':'Match and environment coverage: composition, timing and social-first editing.',
         'exp.card3.title':'Strategy','exp.card3.body':'Tone, calendar and metrics. Fast iteration driven by data.',
@@ -462,8 +399,7 @@
         'skills.block1.title':'Content','skills.block1.a':'Creative Direction','skills.block1.b':'Scripting & Storytelling','skills.block1.c':'Editorial Calendar',
         'skills.block2.title':'Visual',
         'skills.block3.title':'Web','skills.block3.a':'Landing Pages','skills.block3.b':'Mobile Optimization',
-        'contact.title':'Contact','contact.lead':'Let’s chat about a project.',
-        'footer.made':'Built with focus on simplicity and detail.'
+        'contact.title':'Contact','contact.lead':'Let’s chat about a project.'
       }
     };
 
@@ -481,27 +417,6 @@
     }
     document.getElementById('langToggle').addEventListener('click', ()=>applyLang(currentLang==='es'?'en':'es'));
     applyLang('es');
-
-    // Carousel logic
-    document.querySelectorAll('.carousel').forEach(carousel => {
-      const track = carousel.querySelector('.carousel-track');
-      const slides = Array.from(track.children);
-      let index = 0;
-      const update = ()=>{ track.style.transform = `translateX(-${index*100}%)`; };
-      const nextBtn = carousel.querySelector('.next');
-      const prevBtn = carousel.querySelector('.prev');
-      if(nextBtn) nextBtn.addEventListener('click', ()=>{ index = (index+1)%slides.length; update(); });
-      if(prevBtn) prevBtn.addEventListener('click', ()=>{ index = (index-1+slides.length)%slides.length; update(); });
-      // Swipe
-      let startX=0, dx=0;
-      track.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
-      track.addEventListener('touchmove', e=>{ dx = e.touches[0].clientX - startX; }, {passive:true});
-      track.addEventListener('touchend', ()=>{ if(Math.abs(dx)>50){ index = dx<0 ? (index+1)%slides.length : (index-1+slides.length)%slides.length; update(); } dx=0; });
-      // Keyboard
-      carousel.setAttribute('tabindex','0');
-      carousel.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ index=(index+1)%slides.length; update(); } if(e.key==='ArrowLeft'){ index=(index-1+slides.length)%slides.length; update(); } });
-    });
   </script>
 </body>
 </html>
-    
